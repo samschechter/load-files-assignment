@@ -25,12 +25,15 @@ fun main(args: Array<String>) {
                 }
 
                 val validatorResult = loadfile.validate()
-                println("| Loadfile is valid: ${validatorResult.isValid()}")
+                val isValid = validatorResult.all { entry -> entry.second.isEmpty() }
+                println("| Loadfile is valid: $isValid\n")
 
-                if(!validatorResult.isValid()) {
-                    println("| Invalid Entries: ")
-                    for(entry in validatorResult.invalidEntries) {
-                        println("| %-19s | %-19s | %-32s |\n".format(entry.controlNumber, entry.volumeName, entry.path))
+                if(!isValid) {
+                    println("| Invalid Entries: \n")
+                    for(entry in validatorResult) {
+                        println("| ${entry.first}")
+                        println("| ------------------- | ------------------- | -------------------------------- |")
+                        entry.second.forEach { println("| %-19s | %-19s | %-32s |\n".format(it.controlNumber, it.volumeName, it.path)) }
                     }
                 }
 

@@ -9,13 +9,14 @@ import java.nio.file.Path
 abstract class Loadfile(pathname: String): Closeable {
     private val path: Path = FileSystems.getDefault().getPath(pathname)
     private val validators: List<Validator> = listOf(
-            DocumentsExistValidator(path.parent.toAbsolutePath().toString())
+            DocumentsExistValidator(path.parent.toAbsolutePath().toString()),
+            FileExtensionValidator()
     )
 
     val reader: BufferedReader = Files.newBufferedReader(path)
     val entries: List<LoadfileEntry> by lazy { entries() }
     val validate = {
-        Validator.Result(validators.flatMap { validator -> validator.validate(entries).invalidEntries })
+        validators.map { validator -> validator.javaClass.simpleName to validator.validate(entries).invalidEntries }
     }
 
     companion object {
