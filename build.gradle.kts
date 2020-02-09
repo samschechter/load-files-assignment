@@ -25,6 +25,9 @@ dependencies {
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+")
+
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 

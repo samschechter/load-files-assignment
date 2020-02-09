@@ -24,6 +24,7 @@ abstract class Loadfile(pathname: String): Closeable {
             return when {
                 pathname.endsWith(".opt") -> OptLoadfile(pathname)
                 pathname.endsWith(".lfp") -> LfpLoadfile(pathname)
+                pathname.endsWith(".xlf") -> XlfLoadfile(pathname)
                 else -> throw IllegalArgumentException("Unrecognized file extension for file $pathname")
             }
         }

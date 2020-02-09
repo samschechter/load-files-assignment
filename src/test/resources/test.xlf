@@ -1,0 +1,19 @@
+<loadfile>
+  <entries>
+    <entry control-number="test-000001">
+        <volume>Import Test 01</volume>
+        <image-path>IMAGES/001/</image-path>
+        <image-name>test-000001.tif</image-name>
+    </entry>
+    <entry control-number="test-000002">
+        <volume>Import Test 01</volume>
+        <image-path>IMAGES/001/</image-path>
+        <image-name>test-000002.tif</image-name>
+    </entry>
+    <entry control-number="test-000003">
+        <volume>Import Test 01</volume>
+        <image-path>IMAGES/001/</image-path>
+        <image-name>test-000003.tif</image-name>
+    </entry>
+  </entries>
+</loadfile>
