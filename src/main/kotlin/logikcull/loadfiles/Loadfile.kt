@@ -15,6 +15,7 @@ abstract class Loadfile(pathname: String): Closeable {
         fun from(pathname: String): Loadfile {
             return when {
                 pathname.endsWith(".opt") -> OptLoadfile(pathname)
+                pathname.endsWith(".lfp") -> LfpLoadfile(pathname)
                 else -> throw IllegalArgumentException("Unrecognized file extension for file $pathname")
             }
         }
