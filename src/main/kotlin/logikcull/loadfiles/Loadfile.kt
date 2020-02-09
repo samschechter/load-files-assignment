@@ -1,10 +1,12 @@
 package logikcull.loadfiles
 
+import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.Closeable
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.coroutines.CoroutineContext
 
 abstract class Loadfile(pathname: String): Closeable {
     private val path: Path = FileSystems.getDefault().getPath(pathname)
@@ -16,16 +18,22 @@ abstract class Loadfile(pathname: String): Closeable {
     val reader: BufferedReader = Files.newBufferedReader(path)
     val entries: List<LoadfileEntry> by lazy { entries() }
     val validate = {
-        validators.map { validator -> validator.javaClass.simpleName to validator.validate(entries).invalidEntries }
+        GlobalScope.async {
+            validators.map { validator ->
+                validator.javaClass.simpleName to validator.validate(entries).invalidEntries
+            }
+        }
     }
 
     companion object {
-        fun from(pathname: String): Loadfile {
-            return when {
-                pathname.endsWith(".opt") -> OptLoadfile(pathname)
-                pathname.endsWith(".lfp") -> LfpLoadfile(pathname)
-                pathname.endsWith(".xlf") -> XlfLoadfile(pathname)
-                else -> throw IllegalArgumentException("Unrecognized file extension for file $pathname")
+        suspend fun fromAsync(pathname: String): Deferred<Loadfile> {
+            return GlobalScope.async {
+                when {
+                    pathname.endsWith(".opt") -> OptLoadfile(pathname)
+                    pathname.endsWith(".lfp") -> LfpLoadfile(pathname)
+                    pathname.endsWith(".xlf") -> XlfLoadfile(pathname)
+                    else -> throw IllegalArgumentException("Unrecognized file extension for file $pathname")
+                }
             }
         }
     }
