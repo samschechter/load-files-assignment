@@ -1,13 +1,12 @@
 package logikcull.loadfiles
 
-import java.io.InputStreamReader
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class OptLoadfileTest {
     @Test
     fun testOptLoadfile() {
-        val subject = OptLoadfile(InputStreamReader(javaClass.getResourceAsStream("/test.opt")))
+        val subject = OptLoadfile(javaClass.getResource("/test.opt").path)
 
         assertEquals(subject.entries.size, 3)
         for (entry in subject.entries) {

@@ -3,16 +3,9 @@
  */
 package logikcull.loadfiles
 
-import java.nio.file.FileSystems
-import java.nio.file.Files
-
 class App {
-    fun parse(pathname: String): OptLoadfile {
-        val path = FileSystems.getDefault().getPath(pathname)
-        if (path.toString().endsWith(".opt")) {
-            return OptLoadfile(Files.newBufferedReader(path))
-        }
-        throw IllegalArgumentException("Unrecognized file extension for file $path")
+    fun parse(pathname: String): Loadfile {
+        return Loadfile.from(pathname)
     }
 }
 
