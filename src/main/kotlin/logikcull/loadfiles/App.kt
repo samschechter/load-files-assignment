@@ -23,6 +23,17 @@ fun main(args: Array<String>) {
                 for (entry in loadfile.entries) {
                     println("| %-19s | %-19s | %-32s |\n".format(entry.controlNumber, entry.volumeName, entry.path))
                 }
+
+                val validatorResult = loadfile.validate()
+                println("| Loadfile is valid: ${validatorResult.isValid()}")
+
+                if(!validatorResult.isValid()) {
+                    println("| Invalid Entries: ")
+                    for(entry in validatorResult.invalidEntries) {
+                        println("| %-19s | %-19s | %-32s |\n".format(entry.controlNumber, entry.volumeName, entry.path))
+                    }
+                }
+
                 println("")
             }
         } catch (e: Exception) {

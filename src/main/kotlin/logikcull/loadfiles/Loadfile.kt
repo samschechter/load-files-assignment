@@ -8,8 +8,15 @@ import java.nio.file.Path
 
 abstract class Loadfile(pathname: String): Closeable {
     private val path: Path = FileSystems.getDefault().getPath(pathname)
+    private val validators: List<Validator> = listOf(
+            DocumentsExistValidator(path.parent.toAbsolutePath().toString())
+    )
+
     val reader: BufferedReader = Files.newBufferedReader(path)
     val entries: List<LoadfileEntry> by lazy { entries() }
+    val validate = {
+        Validator.Result(validators.flatMap { validator -> validator.validate(entries).invalidEntries })
+    }
 
     companion object {
         fun from(pathname: String): Loadfile {
@@ -26,4 +33,16 @@ abstract class Loadfile(pathname: String): Closeable {
     }
 
     protected abstract fun entries(): List<LoadfileEntry>
+
+    abstract class Validator {
+        abstract fun validate(entries: List<LoadfileEntry>): Result
+
+        data class Result(
+                val invalidEntries: List<LoadfileEntry>
+        ) {
+            fun isValid(): Boolean {
+                return invalidEntries.isEmpty()
+            }
+        }
+    }
 }
